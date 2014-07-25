@@ -1,6 +1,8 @@
 package br.ifes.poo.sensores;
 
-public interface Sensor {
+import br.ifes.poo.componentes.Componente;
+
+public interface Sensor extends Componente{
 	
 	public Double getValor();
 	public void setValor(Double valor);

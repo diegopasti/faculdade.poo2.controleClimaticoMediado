@@ -17,8 +17,16 @@ public class Sala extends Observavel{
 	
 	public Sala(){
 		configurarTemperaturas();
-		configurarSensores();
 		configurarClimatizador();
+		configurarSensores();		
+	}
+	
+	public void ligarClimatizador(){
+		arCondicionado.ligar();
+	}
+	
+	public void desligarClimatizador(){
+		arCondicionado.desligar();
 	}
 	
 	public void exibirStatus(){
@@ -27,9 +35,14 @@ public class Sala extends Observavel{
 	}
 	
 	public void atualizarSensores(){
-		atualizarAmbienteExterno();
-		atualizarSala();
-		notificarObservador();
+		if(arCondicionado.getControleComponentes().sensoresIsOn()){
+			atualizarAmbienteExterno();
+			atualizarSala();
+			notificarObservador();	
+		}
+		else{
+			System.out.println("Sensores não estão ativos");
+		}
 	}
 	
 	private void atualizarSala(){
@@ -79,8 +92,16 @@ public class Sala extends Observavel{
 	private void configurarSensores(){
 		sensoresExternos = new ArrayList<Sensor>();
 		sensoresInternos = new ArrayList<Sensor>();
-		for(int k=0;k<3;k++) sensoresExternos.add(new SensorTemperatura((double) temperaturaExterna));
-		for(int k=0;k<3;k++) sensoresInternos.add(new SensorTemperatura((double) temperaturaInterna));	
+		for(int k=0;k<3;k++){
+			SensorTemperatura se = new SensorTemperatura(arCondicionado.getControleComponentes());
+			se.setValor((double) temperaturaExterna);
+			sensoresExternos.add(se);
+		}
+		for(int k=0;k<3;k++) {
+			SensorTemperatura si = new SensorTemperatura(arCondicionado.getControleComponentes());
+			si.setValor((double) temperaturaInterna);
+			sensoresInternos.add(si);
+		}
 	}
 	
 	public void setTemperaturaInterna(Double v){
